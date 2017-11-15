@@ -10,15 +10,6 @@
   </div>
 
   <div class="calendar__body">
-    <div class="calendar__item">
-      {{ calendarDays | json }}
-      <div class="calendar__item-day">1</div>
-    </div>
-    <div class="calendar__item"></div>
-    <div class="calendar__item"></div>
-    <div class="calendar__item"></div>
-    <div class="calendar__item"></div>
-    <div class="calendar__item"></div>
-    <div class="calendar__item"></div>
+    <app-calendar-day *ngFor="let day of calendarDays" [dayMeta]="day" [calendarEvents]="calendarEvents"></app-calendar-day>
   </div>
 </div>

@@ -9,18 +9,6 @@
   box-sizing: border-box;
   text-align: center;
   background-color: #EEE;
-  width: 140px;
+  width: 150px;
   border: 1px solid #DDD;
-}
-
-.calendar__item {
-  float: left;
-  padding: 10px;
-  border: 1px solid #DDD;
-  width: 140px;
-  height: 140px;
-}
-
-.calendar__item-day {
-  color: #BBB;
 }

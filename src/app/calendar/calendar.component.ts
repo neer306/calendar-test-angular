@@ -1,48 +1,66 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { CalendarEventService } from '../calendar-event.service';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css'],
-  encapsulation: ViewEncapsulation.None
 })
-export class CalendarComponent implements OnInit {
-  currentMonth = new Date().getMonth();
-  currentYear= new Date().getFullYear();
-  calendarDays = this.getDaysArray();
-  constructor() { }
+
+
+export class CalendarComponent implements OnChanges, OnInit {
+  @Input('month') month: number;
+  @Input('year') year: number;
+  calendarDays = [];
+  calendarEvents = [];
+
+  constructor(private calendarEventService: CalendarEventService) { }
 
   ngOnInit() {
+    this.calendarEventService.getEvents().subscribe((data) => {
+      this.calendarEvents = data['list'];
+    });
   }
+
+  ngOnChanges() {
+    this.calendarDays = this.getDaysArray();
+  }
+
   getDaysArray() {
-    let calendarDays = new Date(this.currentYear, this.currentMonth, 0).getDate();
-    let result = [];
+    const calendarDays = new Date(this.year, this.month + 1, 0).getDate();
+    const result = [];
     for (let i = 1; i <= calendarDays; i++) {
       result.push({
-        day: i,
-        currentMonth: true
+        number: i,
+        currentMonth: true,
+        dateObject: new Date(this.year, this.month, i),
+        events: []
       });
     }
-    let firstDayDate = new Date(this.currentYear, this.currentMonth, result[0]);
+    const firstDayDate = new Date(this.year, this.month, result[0].number);
     let firstDay = firstDayDate.getDay();
-    let lastDayDate = new Date(this.currentYear, this.currentMonth, result[result.length]);
+    const lastDayDate = new Date(this.year, this.month, result[result.length - 1].number);
     let lastDay = lastDayDate.getDay();
-
-    while (firstDay) {
-      result.push({
-        day: firstDayDate.setDate(firstDayDate.getDate() - 1),
-        currentMonth: false
+    while (firstDay > 1) {
+      const number = new Date(firstDayDate.setDate(firstDayDate.getDate() - 1)).getDate();
+      result.unshift({
+        number: number,
+        currentMonth: false,
+        dateObject: new Date(this.year, this.month - 1, number),
+        events: []
       });
       firstDay--;
     }
-
-    while (lastDay > 0) {
+    while (lastDay > 0 && lastDay < 7) {
+      const number = new Date(lastDayDate.setDate(lastDayDate.getDate() + 1)).getDate();
       result.push({
-        day: lastDayDate.setDate(lastDayDate.getDate() + 1),
-        currentMonth: false
+        number: number,
+        currentMonth: false,
+        dateObject: new Date(this.year, this.month + 1, number),
+        events: []
       });
       lastDay++;
     }
-    console.log(result);
+    return result;
   }
 }

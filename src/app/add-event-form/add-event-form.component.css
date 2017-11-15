@@ -1,0 +1,13 @@
+.add-event-form {
+  cursor: default;
+  padding: 10px;
+  color: #555;
+  position: absolute;
+  z-index: 2;
+  width: 250px;
+  height: 200px;
+  left: 170px;
+  top: -15px;
+  background-color: #FFF;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.22);
+}

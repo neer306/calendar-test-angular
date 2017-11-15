@@ -1,0 +1,49 @@
+.calendar__day {
+  position: relative;
+  float: left;
+  padding: 10px;
+  border: 1px solid #DDD;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+}
+
+.calendar__day-number {
+  color: #BBB;
+}
+
+.calendar__day-event {
+  margin-top: 10px;
+  background-color: #B5EA8C;
+  color: #555;
+  border-radius: 2px;
+  padding: 3px;
+  position: relative;
+}
+
+.calendar__day-event-detail {
+  color: #555;
+  position: absolute;
+  width: 250px;
+  right: 145px;
+  top: -10px;
+  background-color: #FFF;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.22);
+}
+
+.calendar__day-event-detail-name {
+  font-size: 16px;
+  padding: 12px 10px;
+  border-bottom: 1px solid #DDD;
+}
+
+.calendar__day-event-detail-about {
+  padding: 12px 10px;
+  border-bottom: 1px solid #DDD;
+}
+
+.calendar__day-event-detail-members {
+  padding: 12px 10px;
+  background-color: #F7F7F7;
+}
+
