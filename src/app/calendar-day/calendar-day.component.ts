@@ -9,11 +9,10 @@ import { Component, HostListener, ElementRef, OnChanges, ViewEncapsulation, Inpu
 export class CalendarDayComponent implements OnChanges {
   @Input('dayMeta') dayMeta;
   @Input('calendarEvents') calendarEvents;
-  selected = false;
   showForm = false;
   @HostListener('document:click', ['$event'])
   clickout(event) {
-    this.selected = this.eRef.nativeElement.contains(event.target);
+    this.showForm = this.eRef.nativeElement.contains(event.target);
   }
   constructor(private eRef: ElementRef) { }
 
@@ -26,10 +25,6 @@ export class CalendarDayComponent implements OnChanges {
         this.dayMeta.events.push(this.calendarEvents[e]);
       }
     }
-  }
-
-  showDetail() {
-    this.selected = true;
   }
 
   addEventForm() {

@@ -1,19 +1,8 @@
-<div class="calendar__day" (click)="addEventForm()">
+<div class="calendar__day" [class.calendar__day_active]="showForm" (click)="addEventForm()">
   <div class="calendar__day-number">{{ dayMeta.number }}</div>
-  <div *ngFor="let event of dayMeta.events" class="calendar__day-event" (click)="showDetail()">
-    {{ event.name }}
-    <div *ngIf="selected" class="calendar__day-event-detail">
-      <div class="calendar__day-event-detail-name">{{ event.name }}</div>
-      <div class="calendar__day-event-detail-about">
-        {{ event.date }}
-        {{ event.about }}
-      </div>
-      <div class="calendar__day-event-detail-members">
-        <span class="" *ngFor="let member of event.members">{{ member }}, </span>
-      </div>
-    </div>
-  </div>
 
-  <app-add-event-form [showForm]="showForm"></app-add-event-form>
+  <app-calendar-day-event *ngFor="let event of dayMeta.events" [event]="event"></app-calendar-day-event>
+
+  <app-add-event-form [showForm]="showForm" [date]="dayMeta.dateObject"></app-add-event-form>
 
 </div>

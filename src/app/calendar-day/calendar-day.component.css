@@ -8,6 +8,10 @@
   cursor: pointer;
 }
 
+.calendar__day_active {
+  background-color: #D8EAF7;
+}
+
 .calendar__day-number {
   color: #BBB;
 }
