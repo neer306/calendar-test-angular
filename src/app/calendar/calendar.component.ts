@@ -14,11 +14,20 @@ export class CalendarComponent implements OnChanges, OnInit {
   calendarDays = [];
   calendarEvents = [];
 
-  constructor(private calendarEventService: CalendarEventService) { }
+  constructor(private calendarEventService: CalendarEventService) {
+    calendarEventService.updateEventsObservable.subscribe(() => {
+      this.updateCalendarEvents();
+    });
+  }
 
   ngOnInit() {
+    this.updateCalendarEvents();
+  }
+
+  updateCalendarEvents() {
     this.calendarEventService.getEvents().subscribe((data) => {
       this.calendarEvents = data['list'];
+      this.calendarDays = this.getDaysArray();
     });
   }
 

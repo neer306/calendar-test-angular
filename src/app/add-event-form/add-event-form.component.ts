@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CalendarEventService } from '../calendar-event.service';
 
 @Component({
   selector: 'app-add-event-form',
   templateUrl: './add-event-form.component.html',
   styleUrls: ['./add-event-form.component.css'],
-  encapsulation: ViewEncapsulation.None
 })
 export class AddEventFormComponent implements OnInit {
   @Input('showForm') show;
@@ -16,16 +15,17 @@ export class AddEventFormComponent implements OnInit {
   }
 
   formSubmit(name, members, about) {
-    console.log(name, members, about);
     const body = {
       name: name,
-      members: [],
-      about: about,
+      members:  members ? members.split(',').map(item => item.trim()) : [],
+      about: about ? about : '',
       date: this.date.toISOString()
     };
     this.calendarEventService.addEvent(body).subscribe(response => {
-      console.log(response);
-      this.show = false;
+      if (response['success']) {
+        this.calendarEventService.updateEventsSignal();
+        this.show = false;
+      }
     });
   }
   hideForm() {

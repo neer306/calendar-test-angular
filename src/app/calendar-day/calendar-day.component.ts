@@ -11,8 +11,8 @@ export class CalendarDayComponent implements OnChanges {
   @Input('calendarEvents') calendarEvents;
   showForm = false;
   @HostListener('document:click', ['$event'])
-  clickout(event) {
-    this.showForm = this.eRef.nativeElement.contains(event.target);
+  clickOutside(event) {
+    this.showForm = this.eRef.nativeElement.contains(event.target) && !event.target.classList.contains('calendar__day-event');
   }
   constructor(private eRef: ElementRef) { }
 
