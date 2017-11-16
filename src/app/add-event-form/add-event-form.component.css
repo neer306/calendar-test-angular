@@ -5,10 +5,27 @@
   position: absolute;
   z-index: 2;
   width: 280px;
-  left: 170px;
+  left: 163px;
   top: -15px;
   background-color: #FFF;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.22);
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.22);
+}
+
+.add-event-form:before {
+  top: 15%;
+  left: -6px;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  margin-left: -5px;
+  box-sizing: border-box;
+  border: 8px solid black;
+  border-color: #FFF transparent transparent #FFF;
+  transform-origin: 0 0;
+  transform: rotate(-45deg);
+  box-shadow: -1px -3px 3px 0 rgba(0, 0, 0, 0.22);
 }
 
 .add-event-form__input {
