@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
 import { CalendarEventService } from '../calendar-event.service';
 
 @Component({
@@ -6,29 +7,35 @@ import { CalendarEventService } from '../calendar-event.service';
   templateUrl: './add-event-form.component.html',
   styleUrls: ['./add-event-form.component.css'],
 })
-export class AddEventFormComponent implements OnInit {
-  @Input('showForm') show;
-  @Input('date') date;
-  constructor(private calendarEventService: CalendarEventService) { }
+export class AddEventFormComponent {
 
-  ngOnInit() {
-  }
+  @Input('showForm')
+  show;
 
-  formSubmit(name, members, about) {
-    const body = {
+  @Input('date')
+  date;
+
+  constructor(
+    private calendarEventService: CalendarEventService
+  ) { }
+
+  formSubmit(name: string, members: string, about: string): void {
+    const request = {
       name: name,
       members:  members ? members.split(',').map(item => item.trim()) : [],
       about: about ? about : '',
-      date: this.date.toISOString()
+      date: this.date.toISOString(),
     };
-    this.calendarEventService.addEvent(body).subscribe(response => {
-      if (response['success']) {
+
+    this.calendarEventService.addEvent(request).subscribe(response => {
+      if (response.success) {
         this.calendarEventService.updateEventsSignal();
         this.show = false;
       }
     });
   }
-  hideForm() {
+
+  hideForm(): void {
     this.show = false;
   }
 }
