@@ -28,7 +28,7 @@ export class AddEventFormComponent {
     };
 
     this.calendarEventService.addEvent(request).subscribe(response => {
-      if (response.success) {
+      if (response['success']) {
         this.calendarEventService.updateEventsSignal();
         this.show = false;
       }

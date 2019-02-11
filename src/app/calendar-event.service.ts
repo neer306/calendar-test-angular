@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 const API_URL = 'https://fast-temple-57619.herokuapp.com/api/calendar/';
 
