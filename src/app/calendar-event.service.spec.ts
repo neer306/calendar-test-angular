@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { CalendarEventService } from './calendar-event.service';
+import { CalendarEventService } from './service/calendar-event.service';
 
 describe('CalendarEventService', () => {
   beforeEach(() => {

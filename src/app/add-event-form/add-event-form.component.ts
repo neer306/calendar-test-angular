@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { CalendarEventService } from '../calendar-event.service';
+import { CalendarEventService } from '../service/calendar-event.service';
 
 @Component({
   selector: 'app-add-event-form',
@@ -10,25 +11,37 @@ import { CalendarEventService } from '../calendar-event.service';
 export class AddEventFormComponent {
 
   @Input('showForm')
-  show;
+  show: boolean;
 
   @Input('date')
-  date;
+  date: Date;
+
+  form: FormGroup;
 
   constructor(
-    private calendarEventService: CalendarEventService
-  ) { }
+      private formBuilder: FormBuilder,
+      private calendarEventService: CalendarEventService
+  ) {
 
-  formSubmit(name: string, members: string, about: string): void {
-    const request = {
-      name: name,
-      members:  members ? members.split(',').map(item => item.trim()) : [],
-      about: about ? about : '',
-      date: this.date.toISOString(),
-    };
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      members: ['', [Validators.required]],
+      about: '',
+    });
+  }
+
+  formSubmit(): void {
+    const request = Object.assign(
+        {},
+        this.form.value,
+        {
+          members: this.form.value.members ? this.form.value.members.split(',').map(item => item.trim()) : [],
+          date: this.date.toISOString(),
+        }
+    );
 
     this.calendarEventService.addEvent(request).subscribe(response => {
-      if (response['success']) {
+      if (response.success) {
         this.calendarEventService.updateEventsSignal();
         this.show = false;
       }

@@ -1,5 +1,13 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { CalendarEventService } from '../calendar-event.service';
+import { Component, Input, OnChanges } from '@angular/core';
+
+import { IEvent } from "../store/events.store";
+
+export interface ICalendarDay {
+  number: number;
+  currentMonth: boolean;
+  dateObject: Date;
+  events: IEvent[];
+}
 
 @Component({
   selector: 'app-calendar',
@@ -7,69 +15,62 @@ import { CalendarEventService } from '../calendar-event.service';
   styleUrls: ['./calendar.component.css'],
 })
 
+export class CalendarComponent implements OnChanges {
 
-export class CalendarComponent implements OnChanges, OnInit {
-  @Input('month') month: number;
-  @Input('year') year: number;
-  calendarDays = [];
-  calendarEvents = [];
+  @Input('month')
+  month: number;
 
-  constructor(private calendarEventService: CalendarEventService) {
-    calendarEventService.updateEventsObservable.subscribe(() => {
-      this.updateCalendarEvents();
-    });
+  @Input('year')
+  year: number;
+
+  calendarDays: ICalendarDay[] = [];
+
+  constructor() {}
+
+  ngOnChanges(): void {
+      this.calendarDays = this.getDaysArray(this.month, this.year);
   }
 
-  ngOnInit() {
-    this.updateCalendarEvents();
-  }
-
-  updateCalendarEvents() {
-    this.calendarEventService.getEvents().subscribe((data) => {
-      this.calendarEvents = data['list'];
-      this.calendarDays = this.getDaysArray();
-    });
-  }
-
-  ngOnChanges() {
-    this.calendarDays = this.getDaysArray();
-  }
-
-  getDaysArray() {
-    const calendarDays = new Date(this.year, this.month + 1, 0).getDate();
+  getDaysArray(month: number, year: number): ICalendarDay[] {
+    const calendarDays = new Date(year, month + 1, 0).getDate();
     const result = [];
+
     for (let i = 1; i <= calendarDays; i++) {
       result.push({
         number: i,
         currentMonth: true,
-        dateObject: new Date(this.year, this.month, i),
-        events: []
+        dateObject: new Date(year, month, i),
+        events: [],
       });
     }
-    const firstDayDate = new Date(this.year, this.month, result[0].number);
+
+    const firstDayDate = new Date(year, month, result[0].number);
     let firstDay = firstDayDate.getDay();
-    const lastDayDate = new Date(this.year, this.month, result[result.length - 1].number);
+    const lastDayDate = new Date(year, month, result[result.length - 1].number);
     let lastDay = lastDayDate.getDay();
+
     while (firstDay > 1) {
-      const number = new Date(firstDayDate.setDate(firstDayDate.getDate() - 1)).getDate();
+      const numberFirst = new Date(firstDayDate.setDate(firstDayDate.getDate() - 1)).getDate();
       result.unshift({
-        number: number,
+        number: numberFirst,
         currentMonth: false,
-        dateObject: new Date(this.year, this.month - 1, number),
-        events: []
+        dateObject: new Date(year, month - 1, numberFirst),
+        events: [],
       });
       firstDay--;
     }
+
     while (lastDay > 0 && lastDay < 7) {
-      const number = new Date(lastDayDate.setDate(lastDayDate.getDate() + 1)).getDate();
+      const numberLast = new Date(lastDayDate.setDate(lastDayDate.getDate() + 1)).getDate();
       result.push({
-        number: number,
+        number: numberLast,
         currentMonth: false,
-        dateObject: new Date(this.year, this.month + 1, number),
-        events: []
+        dateObject: new Date(year, month + 1, numberLast),
+        events: [],
       });
       lastDay++;
     }
+
     return result;
   }
 }

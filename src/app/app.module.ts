@@ -5,10 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import locale from '@angular/common/locales/ru';
 
+import { ApiService } from "./service/api.service";
+import { EventsStore } from "./store/events.store";
 import { AppComponent } from './app.component';
 import { MonthSelectorComponent } from './month-selector/month-selector.component';
 import { CalendarComponent } from './calendar/calendar.component';
-import { CalendarEventService } from './calendar-event.service';
+import { CalendarEventService } from './service/calendar-event.service';
 import { CalendarDayComponent } from './calendar-day/calendar-day.component';
 import { AddEventFormComponent } from './add-event-form/add-event-form.component';
 import { CalendarDayEventComponent } from './calendar-day-event/calendar-day-event.component';
@@ -24,17 +26,19 @@ registerLocaleData(locale);
     CalendarDayComponent,
     AddEventFormComponent,
     CalendarDayEventComponent,
-    JoinPipe
+    JoinPipe,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [
+    EventsStore,
     CalendarEventService,
-    {provide: LOCALE_ID, useValue: 'ru_RU'}
+    ApiService,
+    { provide: LOCALE_ID, useValue: 'ru_RU' },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

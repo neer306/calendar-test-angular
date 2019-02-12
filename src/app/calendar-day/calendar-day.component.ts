@@ -1,33 +1,64 @@
-import { Component, HostListener, ElementRef, OnChanges, ViewEncapsulation, Input } from '@angular/core';
+import { Component, HostListener, ElementRef, OnChanges, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
+import { Subscription } from "rxjs";
+
+import { ICalendarDay } from "../calendar/calendar.component";
+import { EventsStore, IEvent } from "../store/events.store";
 
 @Component({
   selector: 'app-calendar-day',
   templateUrl: './calendar-day.component.html',
   styleUrls: ['./calendar-day.component.css'],
-  encapsulation: ViewEncapsulation.None
 })
-export class CalendarDayComponent implements OnChanges {
-  @Input('dayMeta') dayMeta;
-  @Input('calendarEvents') calendarEvents;
-  showForm = false;
-  @HostListener('document:click', ['$event'])
-  clickOutside(event) {
-    this.showForm = this.eRef.nativeElement.contains(event.target) && !event.target.classList.contains('calendar__day-event');
-  }
-  constructor(private eRef: ElementRef) { }
+export class CalendarDayComponent implements OnChanges, OnInit, OnDestroy {
 
-  ngOnChanges() {
-    for (let e = 0; e < this.calendarEvents.length; e++) {
-      const eventDate = new Date(this.calendarEvents[e].date);
-      if (eventDate.getDate() === this.dayMeta.dateObject.getDate() &&
-        eventDate.getMonth() === this.dayMeta.dateObject.getMonth() &&
-        eventDate.getFullYear() === this.dayMeta.dateObject.getFullYear()) {
-        this.dayMeta.events.push(this.calendarEvents[e]);
-      }
+  @Input('dayMeta')
+  dayMeta: ICalendarDay;
+
+  showForm = false;
+
+  subscriptions: Subscription;
+  calendarEvents: IEvent[] = [];
+
+  constructor(
+      private element: ElementRef,
+      private eventStore: EventsStore
+  ) { }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: MouseEvent): void {
+    const target = <HTMLElement>event.target;
+    this.showForm = this.element.nativeElement.contains(target) && !target.classList.contains('calendar__day-event');
+  }
+
+  ngOnInit(): void {
+    this.subscriptions = this.eventStore.info.subscribe(events => {
+      this.calendarEvents = events;
+      this.updateDayEvents();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.dayMeta && !changes.dayMeta.firstChange && changes.dayMeta.currentValue) {
+      this.updateDayEvents();
     }
   }
 
-  addEventForm() {
+  updateDayEvents(): void {
+    this.calendarEvents.forEach(item => {
+      const eventDate = new Date(item.date);
+      if (eventDate.getDate() === this.dayMeta.dateObject.getDate() &&
+          eventDate.getMonth() === this.dayMeta.dateObject.getMonth() &&
+          eventDate.getFullYear() === this.dayMeta.dateObject.getFullYear()) {
+        this.dayMeta.events.push(item);
+      }
+    });
+  }
+
+  addEventForm(): void {
     this.showForm = true;
   }
 }
