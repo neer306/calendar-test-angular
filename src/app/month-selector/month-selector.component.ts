@@ -1,22 +1,29 @@
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
-import { MONTHLIST } from '../context';
+import { Component, OnInit } from '@angular/core';
+
+import { MonthList } from '../constants';
 
 @Component({
   selector: 'app-month-selector',
   templateUrl: './month-selector.component.html',
   styleUrls: ['./month-selector.component.css'],
-  encapsulation: ViewEncapsulation.None
 })
 export class MonthSelectorComponent implements OnInit {
-  currentMonthNum = new Date().getMonth();
-  currentMonth = MONTHLIST[this.currentMonthNum];
-  currentYear = new Date().getFullYear();
-  constructor() { }
 
-  ngOnInit() {
+  currentMonthNum: number;
+  currentMonth: string;
+  currentYear: number;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.currentMonthNum = new Date().getMonth();
+    this.currentMonth = MonthList[this.currentMonthNum];
+    this.currentYear = new Date().getFullYear();
   }
-  changeMonth(action): void {
-    const index = MONTHLIST.indexOf(this.currentMonth);
+
+  changeMonth(action: 'next' | 'prev'): void {
+    const index = MonthList.indexOf(this.currentMonth);
+
     if (action === 'next') {
       if (index < 11) {
         this.currentMonthNum = index + 1;
@@ -32,6 +39,7 @@ export class MonthSelectorComponent implements OnInit {
         this.currentYear = this.currentYear - 1;
       }
     }
-    this.currentMonth = MONTHLIST[this.currentMonthNum];
+
+    this.currentMonth = MonthList[this.currentMonthNum];
   }
 }

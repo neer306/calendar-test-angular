@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
 import { IEvent } from "../store/events.store";
+import { WeakDayNameArray } from "../constants";
 
 export interface ICalendarDay {
   number: number;
@@ -17,6 +18,8 @@ export interface ICalendarDay {
 
 export class CalendarComponent implements OnChanges {
 
+  readonly WeakDayName = WeakDayNameArray;
+
   @Input('month')
   month: number;
 
@@ -28,7 +31,11 @@ export class CalendarComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(): void {
-      this.calendarDays = this.getDaysArray(this.month, this.year);
+    this.calendarDays = this.getDaysArray(this.month, this.year);
+  }
+
+  trackByFunc(index: number, item: ICalendarDay): number {
+    return item ? item.number : null;
   }
 
   getDaysArray(month: number, year: number): ICalendarDay[] {

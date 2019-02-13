@@ -2,11 +2,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'join'
+  name: 'join',
 })
 export class JoinPipe implements PipeTransform {
 
-  transform(array: string[], joiner: string) {
+  transform(array: string[], joiner: string): string {
     return array.join(joiner);
   }
 }
