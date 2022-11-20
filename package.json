@@ -44,7 +44,7 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
     "protractor": "~5.4.2",
-    "rxjs-tslint": "^0.1.7",
+    "rxjs-tslint": "^0.1.8",
     "ts-node": "^8.0.3",
     "tslint": "~5.12.1",
     "tslint-consistent-codestyle": "^1.15.1",
